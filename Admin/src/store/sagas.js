@@ -5,7 +5,7 @@ import accountSaga from './auth/register/saga';
 import loginSaga from './auth/login/saga';
 import forgetSaga from './auth/forgetpwd/saga';
 import LayoutSaga from './layout/saga';
-
+import restuarantData from './Restuarant/sagas';
 export default function* rootSaga() {
     yield all([
         
@@ -13,6 +13,7 @@ export default function* rootSaga() {
         accountSaga(),
         loginSaga(),
         forgetSaga(),
-        LayoutSaga()
+        LayoutSaga(),
+        restuarantData(),
     ])
 }

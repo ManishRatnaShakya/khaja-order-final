@@ -81,3 +81,6 @@ export const changeCover = cover =>({
 export const saveChanges=()=>({
     type:RESTUARANTS.SAVE_CHANGES
 })
+export const getRestuarantData=()=>({
+    type:RESTUARANTS.GET_RESTUARANT_DATA
+})

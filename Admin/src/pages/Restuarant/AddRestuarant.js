@@ -24,7 +24,8 @@ import {
     changeTwitter ,
     changeGoogleMap,
     changeLogo,
-    changeCover
+    changeCover,
+    saveChanges
 } from '../../store/Restuarant/actions';
 //select
 import Select from 'react-select';
@@ -416,7 +417,7 @@ class AddProduct extends Component {
                                                     </Form>
 
                                                     <div className="text-center mt-4">
-                                                        <Button color="primary" type="submit" className="mr-2 waves-effect waves-light">Save Changes</Button>
+                                                        <Button color="primary" type="submit" onClick={this.props.onSubmit} className="mr-2 waves-effect waves-light">Save Changes</Button>
                                                         <Button color="light" type="submit" className="waves-effect ml-1">Cancel</Button>
                                                     </div>
                                                 </TabPane>
@@ -477,6 +478,7 @@ const mapDispatchToProps =(dispatch)=>{
         onChangeGoogleMap: evt=>dispatch(changeGoogleMap(evt.target.value)),
         onChangeLogo:(logo)=>dispatch(changeLogo(logo)),
         onChangeCover:(cover)=>dispatch(changeCover(cover)),
+        onSubmit:()=>dispatch(saveChanges()),
     }
 }
 const withConnect = connect(

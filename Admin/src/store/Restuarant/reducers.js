@@ -84,10 +84,6 @@ const Restuarant =(state=initialState ,action)=>
             draft.restuarant.logo=action.logo;
             break;
 	
-        
-	
-
-        
     }
 });
 export default Restuarant;

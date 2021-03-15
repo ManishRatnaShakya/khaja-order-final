@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect';
 import {initialState} from './reducers';
-const selectRestuarant = state =>state.restuarant|| initialState;
+const selectRestuarant = state =>state.Restuarant|| initialState;
+const selectRestuarantData= state=>state.data|| initialState;
 
 export const makeSelectRestaunt=()=>
     createSelector(
         selectRestuarant,
-        restuarant=>restuarant
+        restuarant=>restuarant.restuarant
     )
 
 export const makeSelectRestauntName=()=>

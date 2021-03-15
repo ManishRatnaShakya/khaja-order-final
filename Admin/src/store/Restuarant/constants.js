@@ -22,6 +22,6 @@ export const RESTUARANTS={
            CHANGE_LOGO:'CHANGE_LOGO',
            CHANGE_COVER:'CHANGE_COVER',
            SAVE_CHANGES:'SAVE_CHANGES',
-
+           GET_RESTUARANT_DATA:'GET_RESTUARANT_DATA'
             
 };
