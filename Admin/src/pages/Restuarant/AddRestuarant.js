@@ -25,7 +25,8 @@ import {
     changeGoogleMap,
     changeLogo,
     changeCover,
-    saveChanges
+    saveChanges,
+    changeStatus,
 } from '../../store/Restuarant/actions';
 //select
 import Select from 'react-select';
@@ -49,9 +50,11 @@ import {
     makeSelectInstagramURL,
     makeSelectPinterestURL,
     makeSelectTwitterURL,
-    makeSelectGoogleMapURL
-    
+    makeSelectGoogleMapURL,
+    makeSelectSetStatus,
  } from '../../store/Restuarant/selectors';
+import Alert from 'reactstrap/lib/Alert';
+// import { makeSelectSetStatus } from './../../store/Restuarant/selectors';
 
 class AddProduct extends Component {
     constructor(props) {
@@ -64,12 +67,26 @@ class AddProduct extends Component {
             activeTab: 1,
             selectedFiles: [],
             selectedFilesCover: [],
+            restuarant:{}
+            
         }
        
         this.toggleTab = this.toggleTab.bind(this);
         this.handleAcceptedFiles = this.handleAcceptedFiles.bind(this);
     }
-   
+    onSubmitData(){
+       
+        const data=this.state.restuarant;
+         console.log("submit",data);
+        this.props.onSubmit(data);
+        // this.setState({activeTab:1})
+    }
+    // componentWillReceiveProps(nextProps) {
+    //     if(nextProps.status){
+    //         console.log("component",nextProps.status)
+    //         this.props.onChangeStatus();
+    //     }
+    // }
     handleAcceptedFiles = files => {
         files.map(file =>
           Object.assign(file, {
@@ -79,7 +96,8 @@ class AddProduct extends Component {
         );
           
         this.setState({ selectedFiles: files });
-        this.props.onChangeLogo(files);
+        // this.props.onChangeLogo(files);
+        this.setState({restuarant:{...this.state.restuarant,r_logo:files}});
       };
     handleAcceptedFilesCover = files => {
         files.map(file =>
@@ -90,7 +108,8 @@ class AddProduct extends Component {
         );
     
         this.setState({ selectedFilesCover: files });
-        this.props.onChangeCover(files);
+        // this.props.onChangeCover(files);
+        this.setState({restuarant:{...this.state.restuarant,r_cover:files}});
       };
     
       /**
@@ -117,13 +136,7 @@ class AddProduct extends Component {
     }
 
     render() {
-        const options = [
-            { value : "TO", label : "Touchscreen" },
-            { value : "CF", label : "Call Function" },
-            { value : "NO", label : "Notifications" },
-            { value : "FI", label : "Fitness" },
-            { value : "OU", label : "Outdoor" },
-        ]
+        console.log("state",this.state);
         return (
             <React.Fragment>
                 <div className="page-content">
@@ -166,21 +179,21 @@ class AddProduct extends Component {
                                                     <Form>
                                                         <FormGroup>
                                                             <Label htmlFor="productname">Restuarant Name</Label>
-                                                            <Input id="productname" onChange={this.props.onChangeName} name="productname" value={this.props.restuarantName} type="text" className="form-control"/>
+                                                            <Input id="productname" onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_name:e.target.value}})} name="productname" value={this.state.restuarantName} type="text" className="form-control"/>
                                                         </FormGroup>
                                                         <Row>
                                                             <Col lg={6}>
                                                                 
                                                                 <FormGroup>
                                                                     <Label htmlFor="manufacturername">Email Address</Label>
-                                                                    <Input onChange={this.props.onChangeEmail} name="productname" value={this.props.restuarantEmail} type="text" className="form-control"/>
+                                                                    <Input onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,ad_email:e.target.value}})} name="productname" value={this.state.restuarantEmail} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                             <Col lg={6}>
                                                                 
                                                                 <FormGroup>
                                                                     <Label htmlFor="manufacturerbrand">Password</Label>
-                                                                    <Input onChange={this.props.onChangePassword} value={this.props.password} type="password" className="form-control"/>
+                                                                    <Input onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,ad_password:e.target.value}})} value={this.state.password} type="password" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                             
@@ -189,8 +202,8 @@ class AddProduct extends Component {
                                                            
                                                             <Col >
                                                                 <FormGroup>
-                                                                    <Label htmlFor="address">Address</Label>
-                                                                    <Input onChange={this.props.onChangeAddress} value={this.props.address} type="text" className="form-control"/>
+                                                                    <Label htmlFor="address">Street Name</Label>
+                                                                    <Input onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_streetname:e.target.value}})} value={this.state.address} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
@@ -198,13 +211,13 @@ class AddProduct extends Component {
                                                             <Col md={4}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="city">City</Label>
-                                                                    <Input onChange={this.props.onChangeCity} value={this.props.city}  type="text" className="form-control"/>
+                                                                    <Input onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_city:e.target.value}})} value={this.state.city}  type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                             <Col md={4}>
                                                                 <FormGroup>
                                                                     <Label className="control-label">State</Label>
-                                                                    <select className="form-control select2" onChange={this.props.onChangeState} >
+                                                                    <select className="form-control select2" onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_state:e.target.value}})} >
                                                                         <option>Select State</option>
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
@@ -217,7 +230,7 @@ class AddProduct extends Component {
                                                             <Col md={4}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="city">Zip Code</Label>
-                                                                    <Input  onChange={this.props.onChangeZip} value={this.props.zip} type="text" className="form-control"/>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_zipcode:e.target.value}})} value={this.state.zip} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
@@ -226,23 +239,23 @@ class AddProduct extends Component {
                                                             <Col md={6}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="Contact 1">Contact 1</Label>
-                                                                    <Input  onChange={this.props.onChangeContact} value={this.props.contact1} type="text" className="form-control"/>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_contact1:e.target.value}})} value={this.state.contact1} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                             <Col md={6}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="Contact 2">Contact 2</Label>
-                                                                    <Input  onChange={this.props.onChangeContact2} value={this.props.contact2} type="text" className="form-control"/>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_contact2:e.target.value}})} value={this.state.contact2} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
                                                         <FormGroup>
                                                             <Label htmlFor="Tagline">Tagline</Label>
-                                                            <textarea className="form-control"  onChange={this.props.onChangeTagline} value={this.props.tagline}  rows="5" placeholder="Write the Tagline"></textarea>
+                                                            <textarea className="form-control"  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_tagline:e.target.value}})} value={this.state.tagline}  rows="5" placeholder="Write the Tagline"></textarea>
                                                         </FormGroup>
                                                         <FormGroup>
                                                             <Label htmlFor="description">Description</Label>
-                                                            <textarea className="form-control" onChange={this.props.onChangeDescription} value={this.props.description} rows="5" placeholder="Take a note here"></textarea>
+                                                            <textarea className="form-control" onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,r_description:e.target.value}})} value={this.state.description} rows="5" placeholder="Take a note here"></textarea>
                                                         </FormGroup>
                                                     </Form>
                     
@@ -383,7 +396,7 @@ class AddProduct extends Component {
                                                             <Col sm={3}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="metatitle">Facebook URL</Label>
-                                                                    <Input  onChange={this.props.onChangeFacebook} value={this.props.facebookURL} type="text" className="form-control"/>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,rd_f_link:e.target.value}})} value={this.state.facebookURL} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                                 
                                                             </Col>
@@ -391,40 +404,52 @@ class AddProduct extends Component {
                                                             <Col sm={3}>
                                                                 <FormGroup>
                                                                     <Label htmlFor="metakeywords">Instagram URL</Label>
-                                                                    <Input  onChange={this.props.onChangeInstagram} value={this.props.instagramURL} type="text" className="form-control"/>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,rd_i_link:e.target.value}})} value={this.state.instagramURL} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                             <Col sm={3}>
                                                                 <FormGroup>
-                                                                    <Label htmlFor="metatitle">Pinterest URL</Label>
-                                                                    <Input  onChange={this.props.onChangePinterest} value={this.props.pinterestURL} type="text" className="form-control"/>
+                                                                    <Label htmlFor="metatitle">Youtube URL</Label>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,rd_y_link:e.target.value}})} value={this.state.pinterestURL} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                                 
                                                             </Col>
                     
                                                             <Col sm={3}>
                                                                 <FormGroup>
-                                                                    <Label htmlFor="metakeywords">Twitter URL</Label>
-                                                                    <Input  onChange={this.props.onChangeTwitter} value={this.props.twitterURL} type="text" className="form-control"/>
+                                                                    <Label htmlFor="metakeywords">WebLink</Label>
+                                                                    <Input  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,rd_w_link:e.target.value}})} value={this.state.twitterURL} type="text" className="form-control"/>
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
 
                                                         <FormGroup>
                                                             <Label htmlFor="metadescription">Your Location On Google Map</Label>
-                                                            <textarea className="form-control"  onChange={this.props.onChangeGoogleMap} value={this.props.googlemapURL}id="metadescription" rows="5" placeholder="Share your map loaction with the link to Google map"></textarea>
+                                                            <textarea className="form-control"  onChange={(e)=>this.setState({restuarant:{...this.state.restuarant,rd_gmap_code:e.target.value}})} value={this.state.googlemapURL}id="metadescription" rows="5" placeholder="Share your map loaction with the link to Google map"></textarea>
                                                         </FormGroup>
                                                     </Form>
 
                                                     <div className="text-center mt-4">
-                                                        <Button color="primary" type="submit" onClick={this.props.onSubmit} className="mr-2 waves-effect waves-light">Save Changes</Button>
+                                                        <Button color="primary" type="submit" onClick={()=>this.onSubmitData()} className="mr-2 waves-effect waves-light">Save Changes</Button>
                                                         <Button color="light" type="submit" className="waves-effect ml-1">Cancel</Button>
+                                                    </div>
+                                                    <div>
+                                                        
                                                     </div>
                                                 </TabPane>
                                             </TabContent>
-                                            <ul className="pager wizard twitter-bs-wizard-pager-link">
+                                            <ul className="pager wizard twitter-bs-wizard-pager-link" style={{display:'flex',justifyContent:"space-between"}}>
                                             <li className={this.state.activeTab === 1 ? "previous disabled" : "previous"}><Link to="#" onClick={() => { this.toggleTab(this.state.activeTab - 1);} }>Previous</Link></li>
+                                            <li>
+                                                  {this.props.status && (this.props.status?  <Alert>
+                                                               Successfull                                                                             
+                                                        </Alert>:<Alert type="warning">
+                                                               Not submitted please check data                                                                   
+                                                        </Alert>)}
+
+                                                </li>
                                                 <li className={this.state.activeTab === 3 ? "next disabled" : "next"}><Link to="#" onClick={() => { this.toggleTab(this.state.activeTab + 1);} }>Next</Link></li>
+                                                
                                             </ul>
                                         </div>
                                     </CardBody>
@@ -456,6 +481,7 @@ const mapStateToProps =createStructuredSelector({
     pinterestURL:makeSelectPinterestURL(),
     twitterURL:makeSelectTwitterURL(),
     googlemapURL:makeSelectGoogleMapURL(),
+    status:makeSelectSetStatus(),
 
 })
 const mapDispatchToProps =(dispatch)=>{ 
@@ -478,7 +504,8 @@ const mapDispatchToProps =(dispatch)=>{
         onChangeGoogleMap: evt=>dispatch(changeGoogleMap(evt.target.value)),
         onChangeLogo:(logo)=>dispatch(changeLogo(logo)),
         onChangeCover:(cover)=>dispatch(changeCover(cover)),
-        onSubmit:()=>dispatch(saveChanges()),
+        onChangeStatus:()=>dispatch(changeStatus(false)),
+        onSubmit:(data)=>dispatch(saveChanges(data)),
     }
 }
 const withConnect = connect(

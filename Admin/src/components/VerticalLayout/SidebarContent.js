@@ -88,8 +88,8 @@ class SidebarContent extends Component {
     render() {
         return (
             <React.Fragment>
-                 <div id="sidebar-menu">
 
+                 <div id="sidebar-menu">
                         <ul className="metismenu list-unstyled" id="side-menu">
                             <li className="menu-title">{this.props.t('Menu')}</li>
 
@@ -97,6 +97,26 @@ class SidebarContent extends Component {
                                 <Link to="/dashboard" className="waves-effect">
                                     <i className="ri-dashboard-line"></i><span className="badge badge-pill badge-success float-right">3</span>
                                     <span className="ml-1">{this.props.t('Dashboard')}</span>
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="items" className=" waves-effect">
+                                    <i className="ri-store-2-line"></i>
+                                    <span className="ml-1">{this.props.t('Items')}</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="category" className=" waves-effect">
+                                    <i className="ri-calendar-2-line"></i>
+                                    <span className="ml-1">{this.props.t('Category')}</span>
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="banner" className=" waves-effect">
+                                    <i className="ri-calendar-2-line"></i>
+                                    <span className="ml-1">{this.props.t('Banner')}</span>
                                 </Link>
                             </li>
 

@@ -1,46 +1,61 @@
 import React, { Component } from 'react';
 
-import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
-
 // Redux
+import { Link } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import {compose} from 'redux';
+import {Redirect} from 'react-router-dom'; 
+import { Row, Col, Input, Button, Container, Label, FormGroup,Spinner ,Alert} from "reactstrap";
 
 // availity-reactstrap-validation
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 
-// actions
-import { checkLogin, apiError } from '../../store/actions';
-
 // import images
-import khaja_order from "../../assets/images/Khajaorder.jpg";
+import logodark from "../../assets/images/Khajaorder.jpg";
+import { makeSelectEmail,makeSelectPassword, makeSelectToken,makeSelectError } from './../../store/Login/selectors';
+import { changeEmail,changePassword,submitLoginData,errorChange} from '../../store/Login/actions';
 
 class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {  username : "admin@themesdesign.in", password : "123456" }
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+                loading:false,
+                error:'',
+        }
+       
     }
+    
+    componentDidMount()
+    {
+      document.body.classList.add("auth-body-bg");
+      console.log("from login err",this.props.error)
 
-    handleSubmit(event, values) {
-        this.props.checkLogin(values, this.props.history);
-    }
-
-    componentDidMount(){
-        this.props.apiError("");
-        document.body.classList.add("auth-body-bg");
     }
 
     componentWillUnmount(){
         document.body.classList.remove("auth-body-bg");
+        // this.props.error && this.setState({error:this.props.error });
+       
     }
 
+    onSubmitLogin(){
+        this.setState({loading:true})
+        this.props.onSubmit();
+    }
+    loadingComponentDisable(){
+            this.props.onErrorChange()
+            return <Alert color="warning">
+             {this.props.error}
+            </Alert>
+    }
     render() {
-
+         
+            if (this.props.authenticated) return <Redirect to="/dashboard" />;
         return (
             <React.Fragment>
-                <div className="home-btn d-none d-sm-block">
+                              <div className="home-btn d-none d-sm-block">
                     <Link to="/"><i className="mdi mdi-home-variant h2 text-white"></i></Link>
                 </div>
                 
@@ -55,29 +70,27 @@ class Login extends Component {
                                         <div>
                                             <div className="text-center">
                                                 <div>
-                                                    <Link to="/" className="logo"><img src={khaja_order} height="100" alt="logo"/></Link>
+                                                    <Link to="/" className="logo"><img src={logodark} height="100" alt="logo"/></Link>
                                                 </div>
     
                                                 <h4 className="font-size-18 mt-4">Welcome Back !</h4>
-                                                <p className="text-muted">Sign in to continue to Nazox.</p>
+                                                <p className="text-muted">Sign in to continue to Khaja Order Admin.</p>
                                             </div>
 
-                                           
-                                            {this.props.loginError && this.props.loginError ? <Alert color="danger">{this.props.loginError}</Alert> : null }
-
+                                            <div>{this.props.error && this.loadingComponentDisable() }</div>
                                             <div className="p-2 mt-5">
-                                                <AvForm className="form-horizontal" onValidSubmit={this.handleSubmit} >
+                                                <AvForm className="form-horizontal" >
                     
                                                     <FormGroup className="auth-form-group-custom mb-4">
                                                         <i className="ri-user-2-line auti-custom-input-icon"></i>
-                                                        <Label htmlFor="username">Username</Label>
-                                                        <AvField name="username" value={this.state.username} type="text" className="form-control" id="username" validate={{email: true, required: true}} placeholder="Enter username"/>
+                                                        <Label htmlFor="email">Email</Label>
+                                                        <Input name="email" type="text" className="form-control" id="email" validate={{email: true, required: true}} value={this.props.email} onChange={this.props.onChangeEmail} placeholder="Enter email"/>
                                                     </FormGroup>
                             
                                                     <FormGroup className="auth-form-group-custom mb-4">
                                                         <i className="ri-lock-2-line auti-custom-input-icon"></i>
                                                         <Label htmlFor="userpassword">Password</Label>
-                                                        <AvField name="password" value={this.state.password} type="password" className="form-control" id="userpassword" placeholder="Enter password"/>
+                                                        <AvField name="password" type="password" className="form-control" id="userpassword" value={this.props.password} onChange ={this.props.onChangePassword} placeholder="Enter password"/>
                                                     </FormGroup>
                             
                                                     <div className="custom-control custom-checkbox">
@@ -86,18 +99,18 @@ class Login extends Component {
                                                     </div>
 
                                                     <div className="mt-4 text-center">
-                                                        <Button color="primary" className="w-md waves-effect waves-light" type="submit">Log In</Button>
+                                                      {(this.state.loading )?  <Spinner style={{ width: '2rem', height: '2rem' }} />:<Button color="primary" className="w-md waves-effect waves-light" type="submit" onClick={()=>this.onSubmitLogin()}>Log In</Button>}
                                                     </div>
 
                                                     <div className="mt-4 text-center">
-                                                        <Link to="/forgot-password" className="text-muted"><i className="mdi mdi-lock mr-1"></i> Forgot your password?</Link>
+                                                        <Link to="/auth-recoverpw" className="text-muted"><i className="mdi mdi-lock mr-1"></i> Forgot your password?</Link>
                                                     </div>
                                                 </AvForm>
                                             </div>
 
                                             <div className="mt-5 text-center">
-                                                <p>Don't have an account ? <Link to="/register" className="font-weight-medium text-primary"> Register </Link> </p>
-                                                <p>© 2020 Nazox. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesdesign</p>
+                                                <p>Don't have an account ? <Link to="/auth-register" className="font-weight-medium text-primary"> Register </Link> </p>
+                                                {/* <p>© 2020 Nazox. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesdesign</p> */}
                                             </div>
                                         </div>
 
@@ -119,9 +132,27 @@ class Login extends Component {
     }
 }
 
-const mapStatetoProps = state => {
-    const { loginError } = state.Login;
-    return { loginError };
+const mapStateToProps =createStructuredSelector({
+    email: makeSelectEmail(),
+    password:makeSelectPassword(),
+    authenticated:makeSelectToken(),
+    error:makeSelectError(),
+
+})
+const mapDispatchToProps =(dispatch)=>{ 
+    return {
+        onChangeEmail:e=>dispatch(changeEmail(e.target.value)),
+        onChangePassword:e=>dispatch(changePassword(e.target.value)),
+        onSubmit:()=>dispatch(submitLoginData()),
+        onErrorChange:()=>dispatch(errorChange('')),
+    }
 }
 
-export default withRouter(connect(mapStatetoProps, { checkLogin, apiError })(Login));
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(Login);
+
+

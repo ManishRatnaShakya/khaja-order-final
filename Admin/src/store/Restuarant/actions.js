@@ -78,9 +78,19 @@ export const changeCover = cover =>({
     type:RESTUARANTS.CHANGE_COVER,
     cover
 })
-export const saveChanges=()=>({
-    type:RESTUARANTS.SAVE_CHANGES
+export const saveChanges=(data)=>({
+    type:RESTUARANTS.SAVE_CHANGES,
+    data:data
 })
 export const getRestuarantData=()=>({
-    type:RESTUARANTS.GET_RESTUARANT_DATA
+    type:RESTUARANTS.GET_RESTUARANT_DATA,
+    
+})
+export const getRestuarantDataApi=(data)=>({
+    type:RESTUARANTS.GET_RESTUARANT_DATA_API,
+    data
+})
+export const changeStatus=(status)=>({
+    type:RESTUARANTS.SET_DATA_STATUS,
+    status
 })

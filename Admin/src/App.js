@@ -85,6 +85,7 @@ class App extends Component {
 								component={route.component}
 								key={idx}
 								isAuthProtected={true}
+								exact
 							/>
 						))}
 					</Switch>

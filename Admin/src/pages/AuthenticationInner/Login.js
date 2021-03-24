@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 // Redux
 import { Link } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import {compose} from 'redux';
 
 import { Row, Col, Input, Button, Container, Label, FormGroup } from "reactstrap";
 
@@ -10,6 +13,8 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 
 // import images
 import logodark from "../../assets/images/logo-dark.png";
+import { makeSelectEmail,makeSelectPassword } from './../../store/Login/selectors';
+import { changeEmail,changePassword ,submitLoginData} from './../../store/Login/actions';
 
 class Login extends Component {
 
@@ -61,14 +66,14 @@ class Login extends Component {
                     
                                                     <FormGroup className="auth-form-group-custom mb-4">
                                                         <i className="ri-user-2-line auti-custom-input-icon"></i>
-                                                        <Label htmlFor="username">Username</Label>
-                                                        <AvField name="username" type="text" className="form-control" id="username" validate={{email: true, required: true}} placeholder="Enter username"/>
+                                                        <Label htmlFor="email">Email</Label>
+                                                        <Input name="email" type="text" className="form-control" id="email" validate={{email: true, required: true}} value={this.props.email} onChange={this.props.onChangeEmail} placeholder="Enter email"/>
                                                     </FormGroup>
                             
                                                     <FormGroup className="auth-form-group-custom mb-4">
                                                         <i className="ri-lock-2-line auti-custom-input-icon"></i>
                                                         <Label htmlFor="userpassword">Password</Label>
-                                                        <AvField name="password" type="password" className="form-control" id="userpassword" placeholder="Enter password"/>
+                                                        <AvField name="password" type="password" className="form-control" id="userpassword" value={this.props.password} onChange ={this.props.onChangePassword} placeholder="Enter password"/>
                                                     </FormGroup>
                             
                                                     <div className="custom-control custom-checkbox">
@@ -77,7 +82,7 @@ class Login extends Component {
                                                     </div>
 
                                                     <div className="mt-4 text-center">
-                                                        <Button color="primary" className="w-md waves-effect waves-light" type="submit">Log In</Button>
+                                                        <Button color="primary" className="w-md waves-effect waves-light" onClick={this.props.onSubmit} type="submit">Log In</Button>
                                                     </div>
 
                                                     <div className="mt-4 text-center">
@@ -88,7 +93,7 @@ class Login extends Component {
 
                                             <div className="mt-5 text-center">
                                                 <p>Don't have an account ? <Link to="/auth-register" className="font-weight-medium text-primary"> Register </Link> </p>
-                                                <p>© 2020 Nazox. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesdesign</p>
+                                                {/* <p>© 2020 Nazox. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesdesign</p> */}
                                             </div>
                                         </div>
 
@@ -110,5 +115,24 @@ class Login extends Component {
     }
 }
 
-export default Login;
+const mapStateToProps =createStructuredSelector({
+    email: makeSelectEmail(),
+    password:makeSelectPassword()
+
+})
+const mapDispatchToProps =(dispatch)=>{ 
+    return {
+        onChangeEmail:e=>dispatch(changeEmail(e.target.value)),
+        onChangePassword:e=>dispatch(changePassword(e.target.value)),
+        onSubmit:()=>dispatch(submitLoginData()),
+    }
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(Login);
+
 

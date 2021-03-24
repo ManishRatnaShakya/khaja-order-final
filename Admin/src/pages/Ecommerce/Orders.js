@@ -89,13 +89,13 @@ class Orders extends Component {
             rows: [
               {
                 checkbox:
-                            <div className="custom-control custom-checkbox">
+                 <div className="custom-control custom-checkbox">
                                 <Input type="checkbox" className="custom-control-input" id="ordercheck1"/>
                                 <Label className="custom-control-label" htmlFor="ordercheck1">&nbsp;</Label>
-                            </div>,
+                </div>,
                 id: <Link to="#" className="text-dark font-weight-bold">#NZ1572</Link>,
                 date: "04 Apr, 2020",
-                billingName: "Walter Brown",
+                billingName: "manish",
                 total: "$172",
                 status : <div className="badge badge-soft-success font-size-12">Paid</div>,
                 invoice : <Button className="btn-rounded" color="light">Invoice <i className="mdi mdi-download ml-2"></i></Button>,

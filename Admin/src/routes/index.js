@@ -103,6 +103,18 @@ import ForgetPwd1 from "../pages/AuthenticationInner/ForgetPassword";
 //Restuarant 
 import AddRestuarant from '../pages/Restuarant/AddRestuarant';
 import ViewRestuarant from '../pages/Restuarant/ViewRestuarant';
+
+//items
+import ViewItems from '../pages/Items/ViewItems';
+import AddItems from '../pages/Items/AddItems';
+
+//category
+import ViewCategory from "../pages/Category/ViewCategory";
+import AddCategory from "../pages/Category/AddCategory";
+
+//Banner
+import Banner from "../pages/Banner/Banner";
+
 //Kanban Board
 import KanbanBoard from "../pages/KanbanBoard/index";
 
@@ -121,6 +133,16 @@ const authProtectedRoutes = [
 	{ path: "/add-restuarant", component: AddRestuarant },
 	{ path: "/view-restuarant", component: ViewRestuarant },
 
+	//items
+	{path:"/items", component:ViewItems},
+	{path:"/add-item", component:AddItems},
+
+	//category
+	{ path:"/category", component:ViewCategory},
+	{ path:"/add-category", component: AddCategory},
+
+	//Banner
+	{ path:"/banner", component:Banner},
 	// Ui
 	{ path: "/ui-alerts", component: UiAlert },
 	{ path: "/ui-buttons", component: UiButtons },

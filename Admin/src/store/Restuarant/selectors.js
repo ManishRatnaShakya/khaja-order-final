@@ -98,3 +98,13 @@ createSelector(
         selectRestuarant,
         restuarant=>restuarant.restuarant.googleMapURL
     )
+
+    export const makeSelectDataFromAPI=()=> 
+    createSelector(selectRestuarant,
+        restuarant=>restuarant.data
+        )
+
+    export const makeSelectSetStatus=()=> 
+    createSelector(selectRestuarant,
+        restuarant=>restuarant.status
+        )
